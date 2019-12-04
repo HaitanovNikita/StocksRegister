@@ -1,0 +1,54 @@
+--Розробник: Гайтанов Н
+--Версія Java: JDK_1.8.0_111
+-- phpMyAdmin SQL Dump
+-- version 4.8.5
+-- https://www.phpmyadmin.net/
+--
+-- Хост: 127.0.0.1
+-- Версия сервера: 10.1.38-MariaDB
+-- Версия PHP: 7.3.3
+--Дата розробки:2019-12-04
+
+* Файл з export-ованою базою даних //stock_register.sql
+
+* Для перевірки роботи коду, помістіть код у метод Main->Main->main(String[] args);
+
+* Для створення нової акції створити новий обьект класу Stocks, з заданням необхідних данних в конструкторі
+    Приклад:
+    SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd");
+    Stocks stocks1 = new Stocks(3234432, "00001332", 2342, 15.540, 33.0, formatForDateNow.format(new Date()), "Petrenko L.P.", "Ltd.: TATNAFT named after VD Shagina");
+    Stocks stocks2 = new Stocks(565480, "00070765", 10000, 23, 12.30, formatForDateNow.format(new Date()), "Ivashuk D.M.", "Ltd.: UKRNAFTOGAS");
+
+    Для додання тільки но створеного обьекту(-тів) класу Stocks до бази данних, необхідно:
+     StocksDaoMySql stocksDaoMySql = new StocksDaoMySql();
+     stocksDaoMySql.create(stocks1);
+
+     Зчитати всі акції, всіх установ:
+     stocksDaoMySql.read();// return ArrayList<Stocks>
+
+     Змінити будь-які дані данної акції:
+     Наприклад змінимо quantity данної акції
+     stocks.setQuantity(5000);// після данної дії, зміни будуть також відображені і в базі даних
+
+     Зчитати всі акції, певної установи:
+     stocksDaoMySql.allStocsInOneInstitution("00001234");// return ArrayList<Stocks>
+
+     Зчитати всіх акцій "публічно", певної установи:
+     stocksDaoMySql.getAllPublicDataStocsInOneInstitution("00001234");// return JsonString
+
+     Зчитати всіх акцій "приватно", певної установи:
+     stocksDaoMySql.getAllPrivateDataStocsInOneInstitution("00001234");// return JsonString
+
+     Сортування даних за будь яким критерієм, здійснюється таким чином:
+     Наприклад, необхідно сортувати дані за quantity
+     ArrayList<Stocks> arrayListSorted = stocksDaoMySql.sort(Constant.FIELDS_STOCKS.quantity.toString());
+
+     Фільтрування даних за певним критерієм з певним значенням здійснюється таким чином:
+     Наприклад, необхідно фільтрувати дані за quantity
+     ArrayList<Stocks> arrayListFiltred = stocksDaoMySql.filtration(Constant.FIELDS_STOCKS.quantity.toString(),Integer.toString(10000));
+
+* Додатково додав, серіалізацію, десеріалізацію в JSON-форматі
+    десеріалізація: stocks.jsonToStocks(String jsonStockString);// return Stocks
+    серіалізація: getPrivateDataInJsonFormat() або getPublicDataInJsonFormat();
+
+
